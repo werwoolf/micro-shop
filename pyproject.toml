@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "micro-shop"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi="^0.111.0"
+uvicorn = "^0.30.1"
+pydantic = {extras = ["email"], version = "^2.8.2"}
+pydantic-settings = "^2.3.4"
+sqlalchemy = "^2.0.31"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
