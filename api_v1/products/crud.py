@@ -5,7 +5,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.engine import Result
 from api_v1.products.schemas import ProductCreate
-from core.models.product import Product
+from core.models import Product
+from .schemas import ProductUpdate, ProductUpdatePartial
 
 
 async def create_product(session: AsyncSession, product_in: ProductCreate) -> Product:
@@ -29,9 +30,21 @@ async def get_products(session: AsyncSession) -> list[Product]:
     return list(products)
 
 
-async def update_product(session: AsyncSession):
-    pass
+async def update_product(
+        session: AsyncSession,
+        product: Product,
+        product_update: ProductUpdate | ProductUpdatePartial,
+        partial: bool = False
+) -> Product:
+    for name, value in product_update.model_dump(exclude_unset=partial).items():
+        setattr(product, name, value)
+    await session.commit()
+    return product
 
 
-async def delete_product(session: AsyncSession):
-    pass
+async def delete_product(
+        session: AsyncSession,
+        product: Product
+) -> None:
+    await session.delete(product)
+    await session.commit()
